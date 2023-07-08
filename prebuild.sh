@@ -27,6 +27,8 @@ fi
 # shellcheck source=paths.sh
 source "$(dirname "$0")/paths.sh"
 
+rm -f /home/ltw/Documents/fdroiddata/build/org.ltw.fennec_dos/android-components/components/lib/push-firebase/build.gradle
+
 function localize_maven {
     # Replace custom Maven repositories with mavenLocal()
     find ./* -name '*.gradle' -type f -print0 | xargs -0 \
