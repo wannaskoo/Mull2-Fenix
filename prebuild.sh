@@ -63,14 +63,14 @@ patch -p1 --no-backup-if-mismatch --quiet < "$patches/https_only.patch"
 pushd "$fenix"
 # Set up the app ID, version name and version code
 sed -i \
-    -e 's|applicationId "org.mozilla"|applicationId "us.spotco"|' \
+    -e 's|applicationId "org.mozilla"|applicationId "org.ltw"|' \
     -e 's|applicationIdSuffix ".firefox"|applicationIdSuffix ".fennec_dos"|' \
-    -e 's|"sharedUserId": "org.mozilla.firefox.sharedID"|"sharedUserId": "us.spotco.fennec_dos.sharedID"|' \
+    -e 's|"sharedUserId": "org.mozilla.firefox.sharedID"|"sharedUserId": "org.ltw.fennec_dos.sharedID"|' \
     -e "s/Config.releaseVersionName(project)/'$1'/" \
     -e "s/Config.generateFennecVersionCode(arch, aab)/$2/" \
     app/build.gradle
 sed -i \
-    -e '/android:targetPackage/s/org.mozilla.firefox/us.spotco.fennec_dos/' \
+    -e '/android:targetPackage/s/org.mozilla.firefox/org.ltw.fennec_dos/' \
     app/src/release/res/xml/shortcuts.xml
 
 # Remove proprietary and tracking libraries
@@ -115,8 +115,8 @@ sed -i \
 
 # Let it be Mull
 sed -i \
-    -e 's/Firefox Daylight/Mull/; s/Firefox/Mull/g' \
-    -e '/about_content/s/Mozilla/Divested Computing Group/' \
+    -e 's/Firefox Daylight/fennec_dos/; s/Firefox/fennec_dos/g' \
+    -e '/about_content/s/Mozilla/Ltw/' \
     app/src/*/res/values*/*strings.xml
 # Fenix uses reflection to create a instance of profile based on the text of
 # the label, see
