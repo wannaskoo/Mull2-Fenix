@@ -3,8 +3,8 @@ AntiFeatures:
 AuthorName: 'Ltw'
 Categories:
 - Internet
-SourceCode: 'https://github.com/wannaskoo/Mull-Fenix'
-Name: fennec_dos
+SourceCode: 'https://github.com/wannaskoo/Mull2-Fenix'
+Name: fennec_tres
 License: MPL-2.0
 Summary: 'Privacy oriented web browser'
 Description: "BRUH"
@@ -29,17 +29,17 @@ Builds:
     srclibs:
       - FirefoxAndroidAS@components-v122.0
       - MozAppServices@v124.0
-      - MullBuild@v124.1.0_ltw
+      - Mull2Build@v124.1.0_ltw2
       - MozFennec@FIREFOX_124_0_1_RELEASE
       - MozGlean@v57.0.0
       - MozGleanAS@v56.0.0
       - gmscore@v0.3.0.233515
       - rustup@1.27.0
       - wasi-sdk@wasi-sdk-20
-    prebuild: $$MullBuild$$/prebuild.sh $$VERSION$$ $$VERCODE$$
+    prebuild: $$Mull2Build$$/prebuild.sh $$VERSION$$ $$VERCODE$$
     scanignore:
       - android-components/components/lib/publicsuffixlist/src/main/assets/publicsuffixes
-    build: $$MullBuild$$/build.sh
+    build: $$Mull2Build$$/build.sh
     ndk: r25c
 
 MaintainerNotes: |-
