@@ -271,6 +271,15 @@ sed -i -e '/^    mavenLocal/{n;d}' tools/nimbus-gradle-plugin/build.gradle
 sed -i 's|https://|hxxps://|' tools/nimbus-gradle-plugin/src/main/groovy/org/mozilla/appservices/tooling/nimbus/NimbusGradlePlugin.groovy
 popd
 
+
+#
+# WASI SDK
+#
+
+pushd "$wasi"
+patch -p1 --no-backup-if-mismatch --quiet < "$mozilla_release/taskcluster/scripts/misc/wasi-sdk.patch"
+popd
+
 #
 # GeckoView
 #
@@ -298,7 +307,7 @@ ac_add_options --disable-profiling
 ac_add_options --disable-rust-debug
 ac_add_options --disable-tests
 ac_add_options --disable-updater
-ac_add_options --enable-application=mobile/android
+ac_add_options --enable-project=mobile/android
 ac_add_options --enable-hardening
 ac_add_options --enable-optimize
 ac_add_options --enable-release
@@ -320,6 +329,8 @@ ac_add_options WASM_CC="$wasi/build/install/wasi/bin/clang"
 ac_add_options WASM_CXX="$wasi/build/install/wasi/bin/clang++"
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj
 EOF
+#ac_add_options --without-wasm-sandboxed-libraries #disable wasi usage
+#ac_add_options --enable-clang-plugin #MozFennec/build/clang-plugin/plugin.h:8:10: fatal error: 'clang/AST/ASTConsumer.h' file not found
 
 # Disable Gecko Media Plugins and casting
 sed -i -e '/gmp-provider/d; /casting.enabled/d' mobile/android/app/geckoview-prefs.js
