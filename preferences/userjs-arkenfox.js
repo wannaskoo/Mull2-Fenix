@@ -87,19 +87,27 @@ pref("_user.js.parrot", "0100 syntax error: the parrot's dead!");
  * 0=blank, 1=home, 2=last visited page, 3=resume previous session
  * [NOTE] Session Restore is cleared with history (2811), and not used in Private Browsing mode
  * [SETTING] General>Startup>Restore previous session ***/
-pref("browser.startup.page", 0);
+pref("browser.startup.page", 1);
 /* 0103: set HOME+NEWWINDOW page
  * about:home=Firefox Home (default, see 0105), custom URL, about:blank
  * [SETTING] Home>New Windows and Tabs>Homepage and new windows ***/
-pref("browser.startup.homepage", "about:blank");
+pref("browser.startup.homepage", "about:home");
 /* 0104: set NEWTAB page
  * true=Firefox Home (default, see 0105), false=blank page
  * [SETTING] Home>New Windows and Tabs>New tabs ***/
-pref("browser.newtabpage.enabled", false);
-/* 0105: disable sponsored content on Firefox Home (Activity Stream)
- * [SETTING] Home>Firefox Home Content ***/
-pref("browser.newtabpage.activity-stream.showSponsored", false); // [FF58+]
-pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false); // [FF83+] Shortcuts>Sponsored shortcuts
+pref("browser.newtabpage.enabled", true);
+pref("browser.newtab.preload", false);
+/* 0105: disable some Activity Stream items
+ * Activity Stream is the default homepage/newtab based on metadata and browsing behavior
+ * [SETTING] Home>Firefox Home Content>...  to show/hide what you want ***/
+pref("browser.newtabpage.activity-stream.feeds.telemetry", false);
+pref("browser.newtabpage.activity-stream.telemetry", false);
+pref("browser.newtabpage.activity-stream.feeds.snippets", false); // [DEFAULT: false]
+pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
+pref("browser.newtabpage.activity-stream.section.highlights.includePocket", false);
+pref("browser.newtabpage.activity-stream.showSponsored", false);
+pref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed", false); // [FF66+]
+pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false); // [FF83+]
 /* 0106: clear default topsites
  * [NOTE] This does not block you from adding your own ***/
 pref("browser.newtabpage.activity-stream.default.sites", "");
@@ -108,7 +116,7 @@ pref("browser.newtabpage.activity-stream.default.sites", "");
 pref("_user.js.parrot", "0200 syntax error: the parrot's definitely deceased!");
 /* 0201: use Mozilla geolocation service instead of Google if permission is granted [FF74+]
  * Optionally enable logging to the console (defaults to false) ***/
-pref("geo.provider.network.url", "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%");
+pref("geo.provider.network.url", "");
    // pref("geo.provider.network.logging.enabled", true); // [HIDDEN PREF]
 /* 0202: disable using the OS's geolocation service ***/
 pref("geo.provider.ms-windows-location", false); // [WINDOWS]
@@ -250,7 +258,7 @@ pref("network.http.speculative-parallel-limit", 0);
 pref("browser.places.speculativeConnect.enabled", false);
 /* 0610: enforce no "Hyperlink Auditing" (click tracking)
  * [1] https://www.bleepingcomputer.com/news/software/major-browsers-to-prevent-disabling-of-click-tracking-privacy-risk/ ***/
-   // pref("browser.send_pings", false); // [DEFAULT: false]
+ pref("browser.send_pings", false); // [DEFAULT: false]
 
 /*** [SECTION 0700]: DNS / DoH / PROXY / SOCKS ***/
 pref("_user.js.parrot", "0700 syntax error: the parrot's given up the ghost!");
@@ -258,7 +266,7 @@ pref("_user.js.parrot", "0700 syntax error: the parrot's given up the ghost!");
  * e.g. in Tor, this stops your local DNS server from knowing your Tor destination
  * as a remote Tor node will handle the DNS request
  * [1] https://trac.torproject.org/projects/tor/wiki/doc/TorifyHOWTO/WebBrowsers ***/
-pref("network.proxy.socks_remote_dns", true);
+//pref("network.proxy.socks_remote_dns", true);
 /* 0703: disable using UNC (Uniform Naming Convention) paths [FF61+]
  * [SETUP-CHROME] Can break extensions for profiles on network shares
  * [1] https://bugzilla.mozilla.org/1413868 ***/
@@ -505,9 +513,17 @@ pref("browser.xul.error_pages.expert_bad_cert", true);
    [1] https://feeding.cloud.geek.nz/posts/tweaking-referrer-for-privacy-in-firefox/
 ***/
 pref("_user.js.parrot", "1600 syntax error: the parrot rests in peace!");
+/* 1601: control when to send a cross-origin referer
+ * 0=always (default), 1=only if base domains match, 2=only if hosts match
+ * [SETUP-WEB] Known to cause issues with older modems/routers and some sites e.g vimeo, icloud, instagram ***/
+//pref("network.http.referer.XOriginPolicy", 2);
 /* 1602: control the amount of cross-origin information to send [FF52+]
  * 0=send full URI (default), 1=scheme+host+port+path, 2=scheme+host+port ***/
-pref("network.http.referer.XOriginTrimmingPolicy", 2);
+//pref("network.http.referer.XOriginTrimmingPolicy", 2);
+/* 1603: enable the DNT (Do Not Track) HTTP header
+ * [NOTE] DNT is enforced with Enhanced Tracking Protection (2710)
+ * [SETTING] Privacy & Security>Enhanced Tracking Protection>Send websites a "Do Not Track" signal... ***/
+pref("privacy.donottrackheader.enabled", true);
 
 /*** [SECTION 1700]: CONTAINERS ***/
 pref("_user.js.parrot", "1700 syntax error: the parrot's bit the dust!");
@@ -652,13 +668,16 @@ pref("privacy.sanitize.sanitizeOnShutdown", false); //BRACE-DISABLED: usability,
 
 /** SANITIZE ON SHUTDOWN: IGNORES "ALLOW" SITE EXCEPTIONS | v2 migration is FF128+ ***/
 /* 2811: set/enforce what items to clear on shutdown (if 2810 is true) [SETUP-CHROME]
- * [NOTE] If "history" is true, downloads will also be cleared ***/
-pref("privacy.clearOnShutdown.cache", true);     // [DEFAULT: true]
-pref("privacy.clearOnShutdown_v2.cache", true);  // [FF128+] [DEFAULT: true]
-pref("privacy.clearOnShutdown.downloads", true); // [DEFAULT: true]
-pref("privacy.clearOnShutdown.formdata", true);  // [DEFAULT: true]
-pref("privacy.clearOnShutdown.history", true);   // [DEFAULT: true]
-pref("privacy.clearOnShutdown_v2.historyFormDataAndDownloads", true); // [FF128+] [DEFAULT: true]
+ * [NOTE] If "history" is true, downloads will also be cleared
+ * [NOTE] "sessions": Active Logins: refers to HTTP Basic Authentication [1], not logins via cookies
+ * [1] https://en.wikipedia.org/wiki/Basic_access_authentication ***/
+//pref("privacy.clearOnShutdown.cache", true);     // [DEFAULT: true]
+//pref("privacy.clearOnShutdown.downloads", true); // [DEFAULT: true]
+//pref("privacy.clearOnShutdown.formdata", true);  // [DEFAULT: true]
+//pref("privacy.clearOnShutdown.history", true);   // [DEFAULT: true]
+//pref("privacy.clearOnShutdown.sessions", true);  // [DEFAULT: true]
+//pref("privacy.clearOnShutdown.offlineApps", false); // [DEFAULT: false]
+//pref("privacy.clearOnShutdown.cookies", false);
    // pref("privacy.clearOnShutdown.siteSettings", false); // [DEFAULT: false]
    // pref("privacy.clearOnShutdown_v2.siteSettings", false); // [FF128+] [DEFAULT: false]
 /* 2812: set Session Restore to clear on shutdown (if 2810 is true) [FF34+]
@@ -695,18 +714,14 @@ pref("privacy.clearSiteData.historyFormDataAndDownloads", true);
 /* 2830: set manual "Clear History" items, also via Ctrl-Shift-Del [SETUP-CHROME]
  * Firefox remembers your last choices. This will reset them when you start Firefox
  * [NOTE] Regardless of what you set "downloads" to, as soon as the dialog
- * for "Clear Recent History" is opened, it is synced to the same as "history"
- * [SETTING] Privacy & Security>History>Custom Settings>Clear History ***/
-pref("privacy.cpd.cache", true);    // [DEFAULT: true]
-pref("privacy.clearHistory.cache", true);
-pref("privacy.cpd.formdata", true); // [DEFAULT: true]
-pref("privacy.cpd.history", true);  // [DEFAULT: true]
+ * for "Clear Recent History" is opened, it is synced to the same as "history" ***/
+//pref("privacy.cpd.cache", true);    // [DEFAULT: true]
+//pref("privacy.cpd.formdata", true); // [DEFAULT: true]
+//pref("privacy.cpd.history", true);  // [DEFAULT: true]
+//pref("privacy.cpd.sessions", true); // [DEFAULT: true]
+//pref("privacy.cpd.offlineApps", false); // [DEFAULT: false]
+//pref("privacy.cpd.cookies", false);
    // pref("privacy.cpd.downloads", true); // not used, see note above
-pref("privacy.clearHistory.historyFormDataAndDownloads", true);
-pref("privacy.cpd.cookies", false);
-pref("privacy.cpd.sessions", true); // [DEFAULT: true]
-pref("privacy.cpd.offlineApps", false); // [DEFAULT: false]
-pref("privacy.clearHistory.cookiesAndStorage", false);
    // pref("privacy.cpd.openWindows", false); // Session Restore
    // pref("privacy.cpd.passwords", false);
    // pref("privacy.cpd.siteSettings", false);
@@ -827,7 +842,7 @@ pref("privacy.resistFingerprinting.block_mozAddonManager", false); //MULL-MODIFI
  * [WARNING] DO NOT USE: the dimension pref is only meant for testing
  * [1] https://bugzilla.mozilla.org/1407366
  * [2] https://hg.mozilla.org/mozilla-central/rev/6d2d7856e468#l2.32 ***/
-pref("privacy.resistFingerprinting.letterboxing", true); // [HIDDEN PREF]
+//pref("privacy.resistFingerprinting.letterboxing", true); // [HIDDEN PREF]
    // pref("privacy.resistFingerprinting.letterboxing.dimensions", ""); // [HIDDEN PREF]
 /* 4505: experimental RFP [FF91+]
  * [WARNING] DO NOT USE unless testing, see [1] comment 12
@@ -910,9 +925,9 @@ pref("_user.js.parrot", "5000 syntax error: the parrot's taken 'is last bow");
  * [1] https://bugzilla.mozilla.org/1281959 ***/
 pref("browser.download.forbid_open_with", true); //BRACE-UNCOMMENTED: brace-installer-base installs firejail, without this would cause confusion
 /* 5010: disable location bar suggestion types
- * [SETTING] Search>Address Bar>When using the address bar, suggest ***/
-   // pref("browser.urlbar.suggest.history", false);
-   // pref("browser.urlbar.suggest.bookmark", false);
+ * [SETTING] Privacy & Security>Address Bar>When using the address bar, suggest ***/
+pref("browser.urlbar.suggest.history", true);
+pref("browser.urlbar.suggest.bookmark", true);
    // pref("browser.urlbar.suggest.openpage", false);
    // pref("browser.urlbar.suggest.topsites", false); // [FF78+]
 /* 5011: disable location bar dropdown
@@ -924,7 +939,7 @@ pref("browser.download.forbid_open_with", true); //BRACE-UNCOMMENTED: brace-inst
 /* 5013: disable browsing and download history
  * [NOTE] We also clear history and downloads on exit (2811)
  * [SETTING] Privacy & Security>History>Custom Settings>Remember browsing and download history ***/
-   // pref("places.history.enabled", false);
+pref("places.history.enabled", true);
 /* 5014: disable Windows jumplist [WINDOWS] ***/
    // pref("browser.taskbar.lists.enabled", false);
    // pref("browser.taskbar.lists.frequent.enabled", false);
@@ -1269,3 +1284,14 @@ pref("browser.messaging-system.whatsNewPanel.enabled", false);
 
 /* END: internal custom pref to test for syntax errors ***/
 pref("_user.js.parrot", "SUCCESS: No no he's not dead, he's, he's restin'!");
+
+/* MULLVAD SETTINGS ***/
+
+pref("network.proxy.socks_remote_dns", true);
+pref("network.proxy.socks", "10.64.0.1");
+pref("network.proxy.socks_port", 1080);
+pref("network.proxy.socks_version", 5);
+pref("network.proxy.type", 1);
+pref("network.proxy.ftp", "";
+pref("inetwork.proxy.http", "");
+pref("network.proxy.ssl", "");
