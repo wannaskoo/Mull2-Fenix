@@ -3,20 +3,20 @@ AntiFeatures:
 AuthorName: 'Ltw'
 Categories:
 - Internet
-SourceCode: 'https://github.com/wannaskoo/Mull-Fenix'
-Name: fennec_dos
+SourceCode: 'https://github.com/wannaskoo/Mull2-Fenix'
+Name: fennec_tres
 License: MPL-2.0
 Summary: 'Privacy oriented web browser'
 Description: "BRUH"
 
 RepoType: git
-Repo: https://github.com/wannaskoo/Mull-Fenix.git
+Repo: https://github.com/wannaskoo/Mull2-Fenix.git
 
 Builds:
 
   - versionName: 129.0.2
     versionCode: 21290220
-    commit: v129.0.2_ltw
+    commit: v129.0.2_ltw2
     timeout: 18000
     sudo:
       - apt-get update
