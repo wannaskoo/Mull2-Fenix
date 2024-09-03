@@ -145,8 +145,6 @@ popd
 
 pushd "$glean"
 echo "rust.targets=linux-x86-64,$rusttarget" >> local.properties
-# Hack to fix `Unresolved reference: HistogramBase`
-echo "typealias HistogramMetricBase = mozilla.telemetry.glean.private.HistogramBase" >> glean-core/android/src/main/java/mozilla/telemetry/glean/private/HistogramBase.kt
 localize_maven
 popd
 
@@ -165,8 +163,6 @@ sed -i \
 # Hack to prevent too long string from breaking build
 sed -i '/val statusCmd/,+3d' plugins/config/src/main/java/ConfigPlugin.kt
 sed -i '/\/\/ Append "+"/a \        val statusSuffix = "+"' plugins/config/src/main/java/ConfigPlugin.kt
-# Hack to fix `Unresolved reference: HistogramBase`
-echo "typealias HistogramBase = mozilla.telemetry.glean.private.HistogramBase" >> components/service/glean/src/main/java/mozilla/components/service/glean/private/MetricAliases.kt
 popd
 
 #
@@ -256,6 +252,7 @@ ac_add_options --enable-strip
 ac_add_options --target=$target
 ac_add_options --with-android-ndk="$ANDROID_NDK"
 ac_add_options --with-android-sdk="$ANDROID_SDK"
+ac_add_options --with-libclang-path="$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/"
 ac_add_options --with-java-bin-path="/usr/bin"
 ac_add_options --with-gradle=$(command -v gradle)
 ac_add_options --with-wasi-sysroot="$wasi/build/install/wasi/share/wasi-sysroot"
