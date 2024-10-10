@@ -27,13 +27,9 @@ source "$(dirname "$0")/paths.sh"
 # plugins (Glean).
 
 # Set up Android SDK
-if grep -q "Fedora" /etc/os-release; then
-	JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk" "$ANDROID_HOME/tools/bin/sdkmanager" 'build-tools;35.0.0' # for GeckoView
-	JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk" "$ANDROID_HOME/tools/bin/sdkmanager" 'ndk;25.2.9519653' # for GleanAS
-else
-	sdkmanager 'build-tools;35.0.0' # for GeckoView
-	sdkmanager 'ndk;25.2.9519653' # for GleanAS
-fi;
+
+	JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64" "$ANDROID_HOME/tools/bin/sdkmanager" 'build-tools;35.0.0' # for GeckoView
+	JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64" "$ANDROID_HOME/tools/bin/sdkmanager" 'ndk;25.2.9519653' # for GleanAS
 
 # Set up Rust
 # shellcheck disable=SC1090,SC1091
