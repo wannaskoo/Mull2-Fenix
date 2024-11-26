@@ -14,12 +14,12 @@ Summary: 'Privacy oriented web browser'
 Description: "BRUH"
 
 RepoType: git
-Repo: https://github.com/wannaskoo/Mull-Fenix.git
+Repo: https://github.com/wannaskoo/Mull2-Fenix.git
 
 Builds:
   - versionName: 133.0.0
     versionCode: 21330020
-    commit: v133.0.0_ltw
+    commit: v133.0.0_ltw2
     timeout: 36000
     sudo:
       - apt-get update
